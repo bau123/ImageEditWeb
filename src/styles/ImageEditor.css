@@ -1,0 +1,27 @@
+.imageEditorContainer{
+  font-family: calibri;
+  font-size: 16pt;
+}
+
+.imageEditor{
+  display: inline-block;
+  overflow-x: auto;
+  margin: 2%;
+}
+
+.canvas{
+  display: inline-block;
+  text-align: center;
+  border: 1px solid grey;
+  border-radius: 5px;
+}
+
+.editorOptions{
+  display: inline-block;
+  border-left: 1px solid black;
+  float: right;
+}
+
+.imageOption{
+  margin: 15px;
+}
