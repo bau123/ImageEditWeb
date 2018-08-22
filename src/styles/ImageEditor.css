@@ -5,6 +5,7 @@
 
 .imageEditor{
   display: inline-block;
+  width: 79%;
   overflow-x: auto;
   margin: 2%;
 }
@@ -19,6 +20,7 @@
 .editorOptions{
   display: inline-block;
   border-left: 1px solid black;
+  margin-top: 2%;
   float: right;
 }
 

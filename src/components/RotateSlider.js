@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
-import Label from '@govuk-react/label-text';
+import LabelText from '@govuk-react/label-text';
 import { CircularSlider } from 'circular-slider';
+import styled, { css } from 'react-emotion'
 
 
 class RotateSlider extends Component {
@@ -41,7 +42,7 @@ class RotateSlider extends Component {
         }
         return (
             <div className="Slider" >
-                <Label className="RotateSliderLabel" >{this.props.text} </Label>
+                <LabelText className="RotateSliderLabel" >{this.props.text} </LabelText>
                 <br/>
                 <div className="CircularSlider" style={displayStyle}>
                 <CircularSlider

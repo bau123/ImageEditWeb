@@ -7,20 +7,24 @@ import RotateSlider from './RotateSlider';
 import '../styles/ImageEditor.css';
 import Button from '@govuk-react/button';
 import Label from '@govuk-react/label-text';
+
+
+
 class ImageEditor extends Component
 {
+
 
     constructor(props)
     {
         super(props);
         this.state = {
-            editorWidth: 800,
-            editorHeight: 400,
+            editorWidth: 0,
+            editorHeight: 0,
             isEditorSizeChanged: true,
             originalImg: {
                 imgData: "",
-                height: 800,
-                width: 400
+                height: 0,
+                width: 0
             },
             imgData: "",
             isToolsDisabled: true,
@@ -75,6 +79,13 @@ class ImageEditor extends Component
             editorHeight: height
         });
     }
+    setScaleFactor(sign){
+        let factor = this.state.scaleFactor + 0.2 * sign;
+        this.setState({
+            scaleFactor: factor,
+            isEditorSizeChanged: true
+        });
+    }
     setRotateFromTxt(){
         let value = this.refs.rotationTxt.value;
         this.setState({rotateValue: value});
@@ -85,12 +96,12 @@ class ImageEditor extends Component
             rotateValue : value
         });
 
-        let width = this.state.editorWidth * 1.2;
-        let height = this.state.editorHeight * 1.2;
-        let largerSize = width > height? width : height;
-
         if(this.state.isEditorSizeChanged)
         {
+            let width = this.state.editorWidth * 1.2;
+            let height = this.state.editorHeight * 1.2;
+            let largerSize = width > height ? width : height;
+
             this.setState({
                 editorWidth: largerSize,
                 editorHeight: largerSize,
@@ -105,29 +116,33 @@ class ImageEditor extends Component
     {
         var file = document.querySelector('input[type=file]').files[0];
         var reader = new FileReader();
-        const _this = this;
-        reader.onloadend = function () {
+        var _this = this;
+
+        reader.onloadend = function ()
+        {
             _this.resetEditor();
             let image = new Image();
-            image.onload = function() {
+            image.onload = function()
+            {
                 _this.setState({
                     editorWidth: image.width,
-                    editorHeight: image.height,
-                    originalImg: {
+                    editorHeight: image.height
+                });
+                _this.setState({ originalImg: {
                         imgData: reader.result,
                         width: image.width,
                         height: image.height
-                    },
-                    imageEditorWrapperStyle: {
+                    }});
+
+                _this.setState({imageEditorWrapperStyle: {
                         width: image.width,
                         margin: '0 auto'
-                    }
-                });
+                    }});
             };
+
             image.src = reader.result;
-            _this.setState({
-                imgData: reader.result,
-                isToolsDisabled: false});
+            _this.setState({imgData: reader.result});
+            _this.setState({isToolsDisabled: false});
         }
 
         if (file) {
@@ -155,32 +170,36 @@ class ImageEditor extends Component
     cropImg = () => {
         if (this.editor) {
             const canvas = this.editor.getImageScaledToCanvas();
-            this.setState({ imgCropData: canvas.toDataURL() });
+            this.setState({
+                imgCropData: canvas.toDataURL(),
+                isToolsDisabled: true
+            });
             this.toggleCropper(true);
         }
     }
 
     completeCrop(croppedImg)
     {
+        this.setState({ scaleFactor: 1 });
+
         let _this = this;
         let image = new Image();
-        image.onload = function () {
-            _this.setState({
+        image.onload = function ()
+        {
+            _this.setState({rotateValue: 0,
                 editorWidth: image.width,
                 editorHeight: image.height,
-                isEditorSizeChanged: true ,
-                imageEditorWrapperStyle:
-                    {
-                        width: image.width,
-                        margin: '0 auto'
-                    }
+                isEditorSizeChanged: true
             });
+
+            _this.setState({imageEditorWrapperStyle: {
+                    width: image.width,
+                    margin: '0 auto'
+                }});
+            _this.setState({isToolsDisabled: false});
         };
         image.src = croppedImg;
-        this.setState({
-            imgData: croppedImg,
-            scaleFactor: 1 }
-        );
+        this.setState({ imgData: croppedImg });
         this.toggleCropper(false);
     }
 
@@ -194,7 +213,8 @@ class ImageEditor extends Component
             let context = canvasForDownload.getContext("2d");
             let _this = this;
             let finalImage = new Image();
-            finalImage.onload = function () {
+            finalImage.onload = function ()
+            {
                 _this.setState({
                     editorWidth: finalImage.width,
                     editorHeight: finalImage.height
@@ -239,7 +259,7 @@ class ImageEditor extends Component
                     <div className="imageEditor" style={this.state.selectorVisibleStyle}>
                         <div style={this.state.imageEditorWrapperStyle}>
                             <div className="canvas">
-                                <Cropper imgData={this.state.imgCropData} completeCrop={(croppedImg) => { this.completeCrop(croppedImg) }} cropSubmitBtn={this.state.cropSubmitBtn} />
+                                <Cropper imgData={this.state.imgCropData} completeCrop={(croppedImg) => { this.completeCrop(croppedImg) }}  enableTools={() => {this.setState({isToolsDisabled: false})}} toggleCropper={(isToggled) => {this.toggleCropper(isToggled)}}/>
                             </div>
                         </div>
                     </div>
@@ -263,7 +283,9 @@ class ImageEditor extends Component
                         <input type="number" id="rotateTxt" ref="rotationTxt" disabled={this.state.isToolsDisabled}/>
                         <Button type="button" onClick={(degrees) => { this.setRotateFromTxt() }} style={{ display: 'inline-block' }}  disabled={this.state.isToolsDisabled}> Rotate </Button>
                     </div>
+                    <div className="imageOption">
                     <RotateSlider setValue={this.setRotateValue} text={"Rotate Image"} display={this.state.isToolsDisabled}/>
+                    </div>
 
                     <div className="imageOption">
                         <Label htmlFor="resize"> Resize </Label> <br/>
