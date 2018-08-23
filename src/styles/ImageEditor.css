@@ -1,11 +1,9 @@
 .imageEditorContainer{
-  font-family: calibri;
-  font-size: 16pt;
+    flex-direction: row;
 }
 
 .imageEditor{
   display: inline-block;
-  width: 79%;
   overflow-x: auto;
   margin: 2%;
 }

@@ -28,8 +28,6 @@ class Cropper extends Component {
 
     }
 
-    componentDidMount(){
-    }
 
 
     onComplete = (croppedArea, croppedAreaPixels) => {

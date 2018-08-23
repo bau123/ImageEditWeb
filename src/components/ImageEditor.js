@@ -7,7 +7,7 @@ import RotateSlider from './RotateSlider';
 import '../styles/ImageEditor.css';
 import Button from '@govuk-react/button';
 import Label from '@govuk-react/label-text';
-
+import styled from 'react-emotion';
 
 
 class ImageEditor extends Component
@@ -79,13 +79,6 @@ class ImageEditor extends Component
             editorHeight: height
         });
     }
-    setScaleFactor(sign){
-        let factor = this.state.scaleFactor + 0.2 * sign;
-        this.setState({
-            scaleFactor: factor,
-            isEditorSizeChanged: true
-        });
-    }
     setRotateFromTxt(){
         let value = this.refs.rotationTxt.value;
         this.setState({rotateValue: value});
@@ -126,23 +119,23 @@ class ImageEditor extends Component
             {
                 _this.setState({
                     editorWidth: image.width,
-                    editorHeight: image.height
-                });
-                _this.setState({ originalImg: {
+                    editorHeight: image.height,
+                    originalImg: {
                         imgData: reader.result,
                         width: image.width,
                         height: image.height
-                    }});
-
-                _this.setState({imageEditorWrapperStyle: {
+                    },
+                    imageEditorWrapperStyle: {
                         width: image.width,
                         margin: '0 auto'
-                    }});
+                    }
+                });
             };
 
             image.src = reader.result;
-            _this.setState({imgData: reader.result});
-            _this.setState({isToolsDisabled: false});
+            _this.setState({
+                imgData: reader.result,
+                isToolsDisabled: false});
         }
 
         if (file) {
@@ -189,14 +182,12 @@ class ImageEditor extends Component
             _this.setState({rotateValue: 0,
                 editorWidth: image.width,
                 editorHeight: image.height,
-                isEditorSizeChanged: true
-            });
-
-            _this.setState({imageEditorWrapperStyle: {
+                isEditorSizeChanged: true,
+                imageEditorWrapperStyle: {
                     width: image.width,
                     margin: '0 auto'
-                }});
-            _this.setState({isToolsDisabled: false});
+                },
+                isToolsDisabled: false});
         };
         image.src = croppedImg;
         this.setState({ imgData: croppedImg });
@@ -208,7 +199,7 @@ class ImageEditor extends Component
     downloadImg = () =>
     {
         if (this.editor) {
-            const editorCanvas = this.editor.getImageScaledToCanvas()
+            const editorCanvas = this.editor.getImageScaledToCanvas();
             let canvasForDownload = this.refs.canvasForDownload;
             let context = canvasForDownload.getContext("2d");
             let _this = this;
@@ -235,8 +226,17 @@ class ImageEditor extends Component
     setEditorRef = (editor) => this.editor = editor
     render()
     {
+        const ContainerImageOption = styled('div')`
+                   margin: 15px;
+            `
+        const ContainerAllImageOptions = styled('div')`
+                     display: inline-block;
+                      border-left: 1px solid black;
+                      margin-top: 2%;
+                      float: right;
+            `
         return (
-            <div className="imageEditorContainer" ref="imageEditorContainer" style = {{width: "100%"}}>
+            <div className="imageEditorContainer" ref="imageEditorContainer">
                 <div className="imageEditor">
                     <div style={this.state.imageEditorWrapperStyle}>
                         <AvatarEditor
@@ -267,40 +267,38 @@ class ImageEditor extends Component
 
 
                 <div className="editorOptions">
-                    <div className="imageOption">
+                    <ContainerImageOption >
                         <Label htmlFor="fileBrowser"> Upload Image </Label> <br/>
                         <input type="file" ref="fileBrowser" id="fileBrowser" onChange={this.loadFile} style={{display: 'inline-block'}}/>
-                    </div>
+                    </ContainerImageOption>
 
-                    <div className="imageOption">
+                    <ContainerImageOption>
                         <Label htmlFor="crop"> Crop </Label> <br/>
                         <Button type="button" id="crop" style={{ display: 'inline-block' }} disabled={this.state.isToolsDisabled} onClick={this.cropImg} > Crop </Button>
 
-                    </div>
+                    </ContainerImageOption>
 
-                    <div className="imageOption">
+                    <ContainerImageOption>
                         <Label htmlFor="rotateTxt"> Rotate </Label> <br/>
                         <input type="number" id="rotateTxt" ref="rotationTxt" disabled={this.state.isToolsDisabled}/>
                         <Button type="button" onClick={(degrees) => { this.setRotateFromTxt() }} style={{ display: 'inline-block' }}  disabled={this.state.isToolsDisabled}> Rotate </Button>
-                    </div>
-                    <div className="imageOption">
+                    </ContainerImageOption>
                     <RotateSlider setValue={this.setRotateValue} text={"Rotate Image"} display={this.state.isToolsDisabled}/>
-                    </div>
 
-                    <div className="imageOption">
+                    <ContainerImageOption>
                         <Label htmlFor="resize"> Resize </Label> <br/>
                         <button type="button" id="resize" onClick={() => this.resizeImage(-1)} style={{ display: 'inline-block' }}  disabled={this.state.isToolsDisabled}> - </button>
                         <button type="button" onClick={() => this.resizeImage(1)} style={{ display: 'inline-block' }}  disabled={this.state.isToolsDisabled}> + </button>
-                    </div>
+                    </ContainerImageOption>
 
-                    <div className="imageOption">
+                    <ContainerImageOption>
                         <Label htmlFor="download"> Download Image </Label> <br/>
                         <a id="download" ref="downloadBtn" onClick={this.downloadImg}>  <Button disabled={this.state.isToolsDisabled}> Download Image </Button> </a>
-                    </div>
+                    </ContainerImageOption>
 
-                    <div className="imageOption">
+                    <ContainerImageOption>
                         <Button type="reset"  onClick={this.resetEditor} disabled={this.state.isToolsDisabled}>Reset</Button>
-                    </div>
+                    </ContainerImageOption>
 
                 </div>
             </div>
