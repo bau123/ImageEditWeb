@@ -41,8 +41,10 @@ class Cropper extends Component {
         let croppedAreaPixels = this.state.croppedAreaPixels;
         const canvas = this.refs.canvas;
 
-        this.state.canvasWidth = croppedAreaPixels.width;
-        this.state.canvasHeight = croppedAreaPixels.height;
+        this.setState({
+            canvasWidth : croppedAreaPixels.width,
+            canvasHeight : croppedAreaPixels.height
+        })
         canvas.width = croppedAreaPixels.width;
         canvas.height = croppedAreaPixels.height;
 

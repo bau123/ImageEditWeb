@@ -18,8 +18,8 @@ class ImageEditor extends Component
     {
         super(props);
         this.state = {
-            editorWidth: 0,
-            editorHeight: 0,
+            editorWidth: 800,
+            editorHeight: 500,
             isEditorSizeChanged: true,
             originalImg: {
                 imgData: "",
@@ -229,12 +229,7 @@ class ImageEditor extends Component
         const ContainerImageOption = styled('div')`
                    margin: 15px;
             `
-        const ContainerAllImageOptions = styled('div')`
-                     display: inline-block;
-                      border-left: 1px solid black;
-                      margin-top: 2%;
-                      float: right;
-            `
+     œ
         return (
             <div className="imageEditorContainer" ref="imageEditorContainer">
                 <div className="imageEditor">
@@ -252,7 +247,7 @@ class ImageEditor extends Component
                             rotate={this.state.rotateValue}
                         />
                     </div>
-                    <div id="canvasForDownloadDiv" style={{display: 'none'}}>
+                    <div id="canvasForDownloadDiv" style={{display: 'none'}}>className="imageEdit
                         <canvas width={this.state.editorWidth + 20} height={this.state.editorHeight + 20} ref="canvasForDownload" id="canvasForDownload"></canvas>
                     </div>
 

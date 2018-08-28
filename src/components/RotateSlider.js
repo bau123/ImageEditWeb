@@ -41,7 +41,7 @@ class RotateSlider extends Component {
             displayStyle={display: "inline-block"}
         }
         return (
-            <div className="Slider" >
+            <div className="Slider" style={{margin : "15px"}}>
                 <LabelText className="RotateSliderLabel" >{this.props.text} </LabelText>
                 <br/>
                 <div className="CircularSlider" style={displayStyle}>
